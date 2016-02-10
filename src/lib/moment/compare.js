@@ -29,18 +29,9 @@ export function isBefore(input, units) {
     }
 }
 
-export function isBetween(from, to, options) {
-    var units;
-    var inclusive;
-    if (typeof options === 'object') {
-        units = !(isUndefined(options['units'])) ? options['units'] : 'millisecond';
-        inclusive = !(isUndefined(options['inclusive'])) ? options['inclusive'] : '()';
-    } else {
-        units = options;
-        inclusive = arguments[3];
-    }
-    if (inclusive) {
-        switch (inclusive) {
+export function isBetween(from, to, units, inclusivity) {
+    if (inclusivity) {
+        switch (inclusivity) {
             case '()':
                 return this.isAfter(from, units) && this.isBefore(to, units);
             case '(]':
@@ -50,7 +41,7 @@ export function isBetween(from, to, options) {
             case '[]':
                 return !(this.isBefore(from, units) || this.isAfter(to, units));
             default:
-                throw new Error("Inclusive option should be one of '()','[)','(]', or '[]'.");
+                throw new Error("Inclusivity option should be one of '()','[)','(]', or '[]'.");
         }
     } else {
         return this.isAfter(from, units) && this.isBefore(to, units);
